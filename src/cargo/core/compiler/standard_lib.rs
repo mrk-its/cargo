@@ -6,7 +6,7 @@ use crate::core::compiler::{CompileKind, CompileMode, RustcTargetData, Unit};
 use crate::core::profiles::{Profiles, UnitFor};
 use crate::core::resolver::features::{CliFeatures, FeaturesFor, ResolvedFeatures};
 use crate::core::resolver::HasDevUnits;
-use crate::core::{Dependency, PackageId, PackageSet, Resolve, SourceId, Workspace};
+use crate::core::{Dependency, PackageId, PackageSet, Resolve, SourceId, GitReference, Workspace};
 use crate::ops::{self, Packages};
 use crate::util::errors::CargoResult;
 use crate::Config;
@@ -78,7 +78,7 @@ pub fn resolve_std<'cfg>(
         "rustc-std-workspace-alloc",
         "rustc-std-workspace-std",
     ];
-    let patches = to_patch
+    let mut patches = to_patch
         .iter()
         .map(|&name| {
             let source_path = SourceId::for_path(&src_path.join("library").join(name))?;
@@ -86,6 +86,13 @@ pub fn resolve_std<'cfg>(
             Ok(dep)
         })
         .collect::<CargoResult<Vec<_>>>()?;
+    let source_path = SourceId::for_git(
+        &url::Url::parse("https://github.com/mrk-its/compiler-builtins").unwrap(),
+        GitReference::Branch("mos-0.1.108".to_string()),
+    )?;
+    let dep = Dependency::parse("compiler_builtins", None, source_path)?;
+    patches.push(dep);
+
     let crates_io_url = crate::sources::CRATES_IO_INDEX.parse().unwrap();
     let patch = HashMap::from([(crates_io_url, patches)]);
     let members = vec![
