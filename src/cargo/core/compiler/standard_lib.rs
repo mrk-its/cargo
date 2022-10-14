@@ -12,7 +12,7 @@ use crate::util::errors::CargoResult;
 use crate::Config;
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use super::BuildConfig;
 
@@ -88,7 +88,7 @@ pub fn resolve_std<'cfg>(
         })
         .collect::<CargoResult<Vec<_>>>()?;
     let source_path = SourceId::for_path(
-        "/home/mrk/repos/compiler-builtins/"
+        Path::new("/home/mrk/repos/compiler-builtins/")
     )?;
     let dep = Dependency::parse("compiler_builtins", None, source_path)?;
     patches.push(dep);
