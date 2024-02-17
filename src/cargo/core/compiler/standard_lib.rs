@@ -28,7 +28,7 @@ pub fn parse_unstable_flag(value: Option<&str>) -> Vec<String> {
         crates.insert("panic_unwind");
         crates.insert("compiler_builtins");
     } else if crates.contains("core") {
-        crates.insert("compiler_builtins");
+        // crates.insert("compiler_builtins");
     }
     crates.into_iter().map(|s| s.to_string()).collect()
 }
