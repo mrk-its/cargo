@@ -27,7 +27,7 @@ fn std_crates<'a>(crates: &'a [String], default: &'static str, units: &[Unit]) -
         crates.insert("alloc");
         crates.insert("proc_macro");
         crates.insert("panic_unwind");
-        crates.insert("compiler_builtins_patched");
+        crates.insert("https://github.com/mrk-its/compiler-builtins?branch=mos-0.1.150#0.1.150");
         // Only build libtest if it looks like it is needed (libtest depends on libstd)
         // If we know what units we're building, we can filter for libtest depending on the jobs.
         if units
@@ -37,7 +37,7 @@ fn std_crates<'a>(crates: &'a [String], default: &'static str, units: &[Unit]) -
             crates.insert("test");
         }
     } else if crates.contains("core") {
-        crates.insert("compiler_builtins_patched");
+        crates.insert("https://github.com/mrk-its/compiler-builtins?branch=mos-0.1.150#0.1.150");
     }
 
     crates
